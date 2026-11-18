@@ -1,9 +1,8 @@
 ﻿"""Project milestone entry points."""
 from app.feedback_data import milestone_1
-from app.modeling import prepare_model
 
 def milestone_2():
-    return prepare_model()
+    raise NotImplementedError("Milestone 2 is next.")
 
 def milestone_3():
     raise NotImplementedError("Milestone 3 is next.")
