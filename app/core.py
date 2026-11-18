@@ -9,8 +9,9 @@ def milestone_3(**kwargs):
     from app.training import train_model
     return train_model(**kwargs)
 
-def milestone_4():
-    raise NotImplementedError("Milestone 4 is next.")
+def milestone_4(text, model_dir="artifacts/feedback"):
+    from app.inference import FeedbackClassifier
+    return FeedbackClassifier(model_dir).classify(text)
 
 def milestone_5():
     raise NotImplementedError("Milestone 5 is next.")

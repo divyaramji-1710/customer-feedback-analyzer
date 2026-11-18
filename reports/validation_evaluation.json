@@ -1,0 +1,78 @@
+{
+  "split": "validation",
+  "examples": 10,
+  "accuracy": 0.6,
+  "uniform_random_baseline": 0.2,
+  "predictions": [
+    {
+      "text": "The advertised discount was not applied.",
+      "label": "pricing_issue",
+      "predicted": "pricing_issue",
+      "generated_token": "<pricing_issue>",
+      "correct": true
+    },
+    {
+      "text": "The lamp arrived with a cracked base.",
+      "label": "product_issue",
+      "predicted": "product_issue",
+      "generated_token": "<product_issue>",
+      "correct": true
+    },
+    {
+      "text": "The courier delivered to the wrong address.",
+      "label": "delivery_issue",
+      "predicted": "delivery_issue",
+      "generated_token": "<delivery_issue>",
+      "correct": true
+    },
+    {
+      "text": "Please explain your return policy.",
+      "label": "return_refund",
+      "predicted": "staff_praise",
+      "generated_token": "<staff_praise>",
+      "correct": false
+    },
+    {
+      "text": "My express delivery missed the promised date.",
+      "label": "delivery_issue",
+      "predicted": "return_refund",
+      "generated_token": "<return_refund>",
+      "correct": false
+    },
+    {
+      "text": "My coupon was not deducted from the total.",
+      "label": "pricing_issue",
+      "predicted": "pricing_issue",
+      "generated_token": "<pricing_issue>",
+      "correct": true
+    },
+    {
+      "text": "The shoes came with a broken sole.",
+      "label": "product_issue",
+      "predicted": "product_issue",
+      "generated_token": "<product_issue>",
+      "correct": true
+    },
+    {
+      "text": "The cashier was patient and friendly.",
+      "label": "staff_praise",
+      "predicted": "pricing_issue",
+      "generated_token": "<pricing_issue>",
+      "correct": false
+    },
+    {
+      "text": "The employee patiently demonstrated the product.",
+      "label": "staff_praise",
+      "predicted": "staff_praise",
+      "generated_token": "<staff_praise>",
+      "correct": true
+    },
+    {
+      "text": "Please help me arrange an exchange.",
+      "label": "return_refund",
+      "predicted": "pricing_issue",
+      "generated_token": "<pricing_issue>",
+      "correct": false
+    }
+  ]
+}
