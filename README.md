@@ -1,52 +1,230 @@
-# Customer Feedback Analyzer
+\# Customer Feedback Analyzer
 
-[![Built with askThili](https://ask.thili.ai/api/v1/public/projects/gbw8cuw9ms/badge.svg)](https://ask.thili.ai/b/gbw8cuw9ms)
 
-This Customer Feedback Analyzer leverages a fine-tuned GPT-2 model to automatically categorize customer feedback. By generating special label tokens like `<product_issue>` or `<staff_praise>`, the tool helps retail managers quickly understand customer sentiment and focus on key areas for improvement.
 
-## What you are building
+A local Streamlit app that categorizes retail feedback using a fully
 
-**Goal.** You will build a tool that automatically categorizes customer feedback comments, helping retail managers quickly identify trends and prioritize improvements.
+fine-tuned distilgpt2 model.
 
-**Done when.** You will have a fine-tuned GPT-2 model capable of classifying new customer comments by generating special label tokens, and a Streamlit application where users can input comments and see their classifications.
 
-## Milestones
 
-Tick these off as you go, and commit after each one.
+\## Categories
 
-- [ ] **1. Define 3-5 feedback categories and create a small dataset of example comments with labels.**  
-      Hint: Define your categories and create a small dataset of example comments with labels, similar to how legal clauses were tagged.
-- [ ] **2. Extend GPT-2 tokenizer and model with new category tokens.**  
-      Hint: Extend the tokenizer and model with your new category tokens, as shown in the drill for legal tags.
-- [ ] **3. Fine-tune the model using the Hugging Face Trainer.**  
-      Hint: Use the Hugging Face Trainer, following the fine-tuning process from the drill.
-- [ ] **4. Implement an inference function to classify new feedback.**  
-      Hint: Implement an inference function to classify new feedback, similar to how predictions were made in the drill.
-- [ ] **5. Build a simple Streamlit app to input comments and show classifications.**  
-      Hint: Build a simple Streamlit app to input comments and show classifications, integrating your inference function.
 
-## Run it
 
-You need Python 3.12 and git.
+\- Product issue
 
-```bash
-python3.12 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env        # then choose a model; see the comments inside
-streamlit run app/main.py
-pytest
+\- Staff praise
+
+\- Delivery issue
+
+\- Pricing issue
+
+\- Return or refund
+
+
+
+\## How it works
+
+
+
+Five special category tokens are added to the tokenizer, and the model's
+
+embeddings are resized to match. Training supervises only the category
+
+token following each feedback comment.
+
+
+
+Hugging Face Trainer updates all 81,916,416 parameters. Inference generates
+
+one token using greedy decoding. Unrecognized outputs are shown as unknown.
+
+
+
+\## Setup
+
+
+
+Requires Python 3.12 and Git. No GPU or API key is required.
+
+Internet access is needed for the initial model download.
+
+
+
+Run these commands in PowerShell from the project folder:
+
+
+
+```powershell
+
+py -3.12 -m venv .venv
+
+.\\.venv\\Scripts\\python.exe -m pip install -r requirements.txt
+
 ```
 
-Your work goes in `app/core.py` (one stub per milestone) and `tests/test_core.py`. The first tests pass already; they
-check the plumbing.
 
-## Settings and secrets
 
-Model settings live in `.env`, which is ignored by git. **Never commit `.env` or paste a key into code.** If a key ever
-reaches GitHub, treat it as leaked and make a new one.
+\## Generate data and train
 
-## Stretch ideas
 
-- Expand the dataset with more diverse examples for existing categories or add new feedback categories.
-- Implement a feature to display the model's confidence score for each classification.
-- Allow users to edit incorrect classifications and use that feedback to improve the model (e.g., for future re-training).
+
+```powershell
+
+.\\.venv\\Scripts\\python.exe -c "from app.core import milestone\_1; milestone\_1()"
+
+.\\.venv\\Scripts\\python.exe -u -c "from app.core import milestone\_3; milestone\_3()"
+
+```
+
+
+
+Training saves the model and tokenizer in artifacts/feedback.
+
+Model weights and checkpoints are excluded from Git.
+
+
+
+\## Evaluate
+
+
+
+```powershell
+
+.\\.venv\\Scripts\\python.exe -u -c "from app.inference import evaluate; evaluate(split='validation')"
+
+.\\.venv\\Scripts\\python.exe -u -c "from app.inference import evaluate; evaluate(split='test')"
+
+```
+
+
+
+\## Launch the app
+
+
+
+Train the model first, then run:
+
+
+
+```powershell
+
+.\\.venv\\Scripts\\python.exe -m streamlit run app/main.py
+
+```
+
+
+
+No Ollama, external chat API, or .env configuration is needed.
+
+
+
+\## Run tests
+
+
+
+```powershell
+
+.\\.venv\\Scripts\\python.exe -m pytest -q
+
+```
+
+
+
+The automated tests do not download or train a model.
+
+
+
+\## Recorded results
+
+
+
+| Measure | Result |
+
+| --- | --- |
+
+| Synthetic comments | 50 across five balanced categories |
+
+| Training / validation / test | 30 / 10 / 10 |
+
+| Training epochs | 12 |
+
+| Initial validation loss | 3.2696 |
+
+| Best validation loss | 1.2433 |
+
+| Validation accuracy | 60% (6/10) |
+
+| Test accuracy | 60% (6/10) |
+
+| Expected uniform random accuracy | 20% |
+
+| Automated tests | 8 passed |
+
+
+
+Evaluation reports and a copy of the training report are in reports/.
+
+New training runs save their report under artifacts/feedback.
+
+
+
+\## Limitations
+
+
+
+This is a learning prototype. It uses only six training examples per
+
+category, and each evaluation set contains ten comments. One prediction
+
+therefore changes accuracy by ten percentage points.
+
+
+
+The headphones test comment was used in a manual interface check before
+
+the final test evaluation. The test set was therefore not completely
+
+unseen during manual checks. No model changes were made based on that check.
+
+
+
+Returns and refunds were confused with pricing and delivery issues.
+
+Real comments may contain several issues or fall outside these categories.
+
+The model predicts one category only. Long inputs are truncated to the
+
+127-token prompt allowance, and the interface displays a warning.
+
+
+
+The random baseline is theoretical rather than a separately tested model.
+
+Interface examples demonstrate operation, not general accuracy.
+
+More varied training data and a fresh evaluation set are needed before
+
+claiming reliable performance.
+
+
+
+\## Completed milestones
+
+
+
+1\. Created five categories and reproducible labelled dataset splits.
+
+2\. Added category tokens and resized model embeddings.
+
+3\. Fully fine-tuned distilgpt2 using Hugging Face Trainer.
+
+4\. Implemented inference and measured classification accuracy.
+
+5\. Built a Streamlit interface with empty-input handling and limitations.
+
+
+
+Built from the askThili starter and course approach with AI coding assistance.
+

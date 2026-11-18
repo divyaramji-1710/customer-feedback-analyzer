@@ -1,0 +1,78 @@
+{
+  "split": "test",
+  "examples": 10,
+  "accuracy": 0.6,
+  "uniform_random_baseline": 0.2,
+  "predictions": [
+    {
+      "text": "The delivery driver left my parcel in the rain.",
+      "label": "delivery_issue",
+      "predicted": "delivery_issue",
+      "generated_token": "<delivery_issue>",
+      "correct": true
+    },
+    {
+      "text": "I would like a refund for this order.",
+      "label": "return_refund",
+      "predicted": "pricing_issue",
+      "generated_token": "<pricing_issue>",
+      "correct": false
+    },
+    {
+      "text": "The shirt arrived with a torn sleeve.",
+      "label": "product_issue",
+      "predicted": "staff_praise",
+      "generated_token": "<staff_praise>",
+      "correct": false
+    },
+    {
+      "text": "The sale price disappeared at checkout.",
+      "label": "pricing_issue",
+      "predicted": "pricing_issue",
+      "generated_token": "<pricing_issue>",
+      "correct": true
+    },
+    {
+      "text": "The salesperson gave excellent advice.",
+      "label": "staff_praise",
+      "predicted": "pricing_issue",
+      "generated_token": "<pricing_issue>",
+      "correct": false
+    },
+    {
+      "text": "Where can I get a return shipping label?",
+      "label": "return_refund",
+      "predicted": "delivery_issue",
+      "generated_token": "<delivery_issue>",
+      "correct": false
+    },
+    {
+      "text": "I was billed twice for the same item.",
+      "label": "pricing_issue",
+      "predicted": "pricing_issue",
+      "generated_token": "<pricing_issue>",
+      "correct": true
+    },
+    {
+      "text": "The staff treated me with kindness.",
+      "label": "staff_praise",
+      "predicted": "staff_praise",
+      "generated_token": "<staff_praise>",
+      "correct": true
+    },
+    {
+      "text": "The headphones stopped working after one day.",
+      "label": "product_issue",
+      "predicted": "product_issue",
+      "generated_token": "<product_issue>",
+      "correct": true
+    },
+    {
+      "text": "The parcel arrived much later than expected.",
+      "label": "delivery_issue",
+      "predicted": "delivery_issue",
+      "generated_token": "<delivery_issue>",
+      "correct": true
+    }
+  ]
+}
