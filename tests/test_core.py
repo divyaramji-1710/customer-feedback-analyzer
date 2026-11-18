@@ -1,35 +1,64 @@
-"""Your tests. Each milestone in README.md gets one here: write the test first, then make it pass.
+﻿"""Checks that run without downloading or training a model."""
+import json
+from collections import Counter
 
-They start skipped. Remove the `skip` line as you work on each milestone.
-"""
-import pytest
+from app.feedback_data import EXAMPLES, milestone_1
+from app.encoding import MAX_LENGTH, encode_pair
+from app.modeling import LABEL_TOKENS
 
-# Milestone 1: Define 3-5 feedback categories and create a small dataset of example comments with labels.
-@pytest.mark.skip(reason="remove this line when you start milestone 1")
-def test_milestone_1():
-    raise NotImplementedError("write the test for milestone 1")
+def test_dataset_is_balanced_and_saved(tmp_path):
+    splits = milestone_1(tmp_path)
+    assert len(EXAMPLES) == 5
+    for name, per_category in [("train", 6), ("validation", 2), ("test", 2)]:
+        rows = splits[name]
+        assert Counter(row["label"] for row in rows) == {
+            label: per_category for label in EXAMPLES
+        }
+        saved = [
+            json.loads(line)
+            for line in (tmp_path / f"{name}.jsonl").read_text().splitlines()
+        ]
+        assert saved == rows
 
+def test_splits_have_no_duplicate_comments(tmp_path):
+    splits = milestone_1(tmp_path)
+    texts = [
+        row["text"].strip().lower()
+        for rows in splits.values()
+        for row in rows
+    ]
+    assert len(texts) == len(set(texts))
 
-# Milestone 2: Extend GPT-2 tokenizer and model with new category tokens.
-@pytest.mark.skip(reason="remove this line when you start milestone 2")
-def test_milestone_2():
-    raise NotImplementedError("write the test for milestone 2")
+def test_dataset_is_reproducible(tmp_path):
+    assert milestone_1(tmp_path / "a") == milestone_1(tmp_path / "b")
 
+class StubTokenizer:
+    """Controlled token lengths for testing encoding boundaries."""
+    def __init__(self, length):
+        self.length = length
 
-# Milestone 3: Fine-tune the model using the Hugging Face Trainer.
-@pytest.mark.skip(reason="remove this line when you start milestone 3")
-def test_milestone_3():
-    raise NotImplementedError("write the test for milestone 3")
+    def encode(self, text, add_special_tokens=False):
+        return [7] * self.length
 
+    def convert_tokens_to_ids(self, token):
+        assert token in LABEL_TOKENS.values()
+        return 99
 
-# Milestone 4: Implement an inference function to classify new feedback.
-@pytest.mark.skip(reason="remove this line when you start milestone 4")
-def test_milestone_4():
-    raise NotImplementedError("write the test for milestone 4")
+def test_only_category_token_is_supervised():
+    encoded = encode_pair(
+        StubTokenizer(12),
+        {"text": "A damaged item.", "label": "product_issue"},
+    )
+    assert encoded["labels"] == [-100] * 12 + [99]
+    assert encoded["input_ids"][-1] == 99
+    assert encoded["attention_mask"] == [1] * 13
 
-
-# Milestone 5: Build a simple Streamlit app to input comments and show classifications.
-@pytest.mark.skip(reason="remove this line when you start milestone 5")
-def test_milestone_5():
-    raise NotImplementedError("write the test for milestone 5")
-
+def test_long_input_keeps_category_target():
+    encoded = encode_pair(
+        StubTokenizer(MAX_LENGTH * 2),
+        {"text": "A long comment.", "label": "delivery_issue"},
+    )
+    assert len(encoded["input_ids"]) == MAX_LENGTH
+    assert len(encoded["labels"]) == MAX_LENGTH
+    assert encoded["labels"][-1] == 99
+    assert sum(value != -100 for value in encoded["labels"]) == 1
