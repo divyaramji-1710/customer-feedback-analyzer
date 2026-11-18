@@ -5,8 +5,9 @@ from app.modeling import prepare_model
 def milestone_2():
     return prepare_model()
 
-def milestone_3():
-    raise NotImplementedError("Milestone 3 is next.")
+def milestone_3(**kwargs):
+    from app.training import train_model
+    return train_model(**kwargs)
 
 def milestone_4():
     raise NotImplementedError("Milestone 4 is next.")
