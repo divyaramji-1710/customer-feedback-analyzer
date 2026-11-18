@@ -1,4 +1,4 @@
-\# Customer Feedback Analyzer
+﻿\# Customer Feedback Analyzer
 
 
 
@@ -160,7 +160,7 @@ The automated tests do not download or train a model.
 
 | Expected uniform random accuracy | 20% |
 
-| Automated tests | 8 passed |
+| Automated tests | 9 passed |
 
 
 
@@ -227,4 +227,5 @@ claiming reliable performance.
 
 
 Built from the askThili starter and course approach with AI coding assistance.
+
 
