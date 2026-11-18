@@ -14,4 +14,6 @@ def milestone_4(text, model_dir="artifacts/feedback"):
     return FeedbackClassifier(model_dir).classify(text)
 
 def milestone_5():
-    raise NotImplementedError("Milestone 5 is next.")
+    """Return the Streamlit entry point."""
+    from pathlib import Path
+    return Path(__file__).resolve().parent / "main.py"
